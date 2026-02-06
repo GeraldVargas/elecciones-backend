@@ -12,6 +12,8 @@ use Spatie\Permission\Traits\HasRoles;
 class VotoUsuario extends Authenticatable
 {
     use HasFactory, SoftDeletes, HasApiTokens, HasRoles;
+    
+    protected $guard_name = 'sanctum';
 
     protected $table = 'voto_usuario';
     protected $primaryKey = 'id_usuario';
