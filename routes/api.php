@@ -8,18 +8,23 @@ use App\Http\Controllers\API\GeograficoController;
 use App\Http\Controllers\API\MesaController;
 use App\Http\Controllers\API\TipoEleccionController;
 
+Route::get('/ping', function () {
+    return response()->json(['ok' => true, 'message' => 'pong']);
+});
+
 // ==================== RUTAS PÚBLICAS ====================
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
+
 // ==================== RUTAS PROTEGIDAS ====================
 Route::middleware('auth:sanctum')->group(function () {
-    
+
     // Auth
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/me', [AuthController::class, 'me'])->name('me');
     Route::get('/permissions', [AuthController::class, 'permissions'])->name('permissions');
     Route::get('/check-permission/{permission}', [AuthController::class, 'checkPermission'])->name('check-permission');
-    
+
     // Personas
     Route::prefix('personas')->group(function () {
         Route::get('/', [PersonaController::class, 'index'])->name('personas.index');
@@ -29,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [PersonaController::class, 'destroy'])->name('personas.destroy');
         Route::get('/search/buscar', [PersonaController::class, 'search'])->name('personas.search');
     });
-    
+
     // Usuarios
     Route::prefix('usuarios')->group(function () {
         Route::get('/', [UsuarioController::class, 'index'])->name('usuarios.index');
@@ -40,7 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{id}/assign-role', [UsuarioController::class, 'assignRole'])->name('usuarios.assign-role');
         Route::get('/roles/listar', [UsuarioController::class, 'getRoles'])->name('usuarios.get-roles');
     });
-    
+
     // Geográfico
     Route::prefix('geograficos')->group(function () {
         // CRUD básico
@@ -49,7 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [GeograficoController::class, 'show'])->name('geograficos.show');
         Route::put('/{id}', [GeograficoController::class, 'update'])->name('geograficos.update');
         Route::delete('/{id}', [GeograficoController::class, 'destroy'])->name('geograficos.destroy');
-        
+
         // Métodos especiales
         Route::get('/tipos/listar', [GeograficoController::class, 'tipos'])->name('geograficos.tipos');
         Route::get('/tipo/{tipo}', [GeograficoController::class, 'porTipo'])->name('geograficos.por-tipo');
@@ -57,7 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/localidad/{id}/recintos', [GeograficoController::class, 'recintosPorLocalidad'])->name('geograficos.recintos-por-localidad');
         Route::get('/buscar/{termino}', [GeograficoController::class, 'buscar'])->name('geograficos.buscar');
     });
-    
+
     // Mesas
     Route::prefix('mesas')->group(function () {
         Route::get('/', [MesaController::class, 'index'])->name('mesas.index');
@@ -67,7 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [MesaController::class, 'destroy'])->name('mesas.destroy');
         Route::get('/recinto/{id}', [MesaController::class, 'mesasPorRecinto'])->name('mesas.por-recinto');
     });
-    
+
     // Tipo Elección
     Route::prefix('tipo-elecciones')->group(function () {
         Route::get('/', [TipoEleccionController::class, 'index'])->name('tipo-elecciones.index');

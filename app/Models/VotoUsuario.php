@@ -17,7 +17,9 @@ class VotoUsuario extends Authenticatable
 
     protected $table = 'voto_usuario';
     protected $primaryKey = 'id_usuario';
+    protected $guard_name = 'web';
 
+    
     protected $fillable = [
         'nombre_usuario',
         'contrasena',
@@ -26,20 +28,20 @@ class VotoUsuario extends Authenticatable
         'activo',
         'id_persona'
     ];
-
+    
     protected $hidden = [
         'contrasena',
         'token',
         'remember_token'
     ];
-
+    
     protected $casts = [
         'fecha_fin' => 'date',
         'activo' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
-
+    
     /**
      * Get the name of the unique identifier for the user.
      */
@@ -47,7 +49,7 @@ class VotoUsuario extends Authenticatable
     {
         return 'id_usuario';
     }
-
+    
     /**
      * Get the password for the user.
      */
@@ -55,7 +57,7 @@ class VotoUsuario extends Authenticatable
     {
         return $this->contrasena;
     }
-
+    
     /**
      * Relación con persona
      */
@@ -63,7 +65,7 @@ class VotoUsuario extends Authenticatable
     {
         return $this->belongsTo(VotoPersona::class, 'id_persona', 'id_persona');
     }
-
+    
     /**
      * Mutator para encriptar contraseña
      */
@@ -71,7 +73,7 @@ class VotoUsuario extends Authenticatable
     {
         $this->attributes['contrasena'] = bcrypt($value);
     }
-
+    
     /**
      * Verificar si el usuario está activo
      */
@@ -80,11 +82,11 @@ class VotoUsuario extends Authenticatable
         if (!$this->activo) {
             return false;
         }
-
+        
         if ($this->fecha_fin && $this->fecha_fin < now()) {
             return false;
         }
-
+        
         return true;
     }
 }
